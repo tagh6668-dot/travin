@@ -1,0 +1,4 @@
+hcache/*
+mcache/*
+.DS_Store
+*.log

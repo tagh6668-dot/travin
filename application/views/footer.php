@@ -1,0 +1,24 @@
+<div class="clear"></div>
+				</div>
+				
+				
+				
+				
+				
+<div id="footer">
+
+            <!--email_off-->
+            <div id="pageLinks">
+                <a href="#" target="_blank"><?=$lang['Footer']['Homepage'];?></a>
+                <a href="#" target="_blank"><?=$lang['Footer']['Forum'];?></a>
+                <a href="#" target="_blank"><?=$lang['Footer']['FAQ'];?></a>
+                <a href="#" target="_blank"><?=$lang['Footer']['Terms'];?></a>
+                <a href="#" target="_blank"><?=$lang['Footer']['Imprint'];?></a>
+                <div class="clear"></div>
+            </div>
+            <br>
+            <p class="copyright" style="direction:ltr;">© 2011 - 2026 Xtravian.ir Games </p>
+			                                 
+            <!--/email_off-->
+            <br>
+        </div>
