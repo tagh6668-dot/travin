@@ -14,14 +14,14 @@ if (!isset($_POST['package_id']) && !isset($_GET['package_id'])) {
 $package_id = isset($_POST['package_id']) ? intval($_POST['package_id']) : intval($_GET['package_id']);
 
 // Fetch package details
-$pack = $database->query("SELECT * FROM paketler WHERE id = " . $package_id);
+$pack = $database->query("SELECT * FROM packages WHERE id = " . $package_id);
 if (!$pack || count($pack) == 0) {
     die("بسته مورد نظر یافت نشد.");
 }
 
 $package = $pack[0];
-$gold_amount = intval($package['miktar']);
-$price_toman = floatval($package['fiyat']);
+$gold_amount = intval($package['amount']);
+$price_toman = floatval($package['price']);
 $amount_rial = intval($price_toman * 10); // ZarinPal requires Rials
 
 // Get Merchant ID from DB config or fallback to user provided Merchant ID
@@ -37,7 +37,7 @@ $domain = $_SERVER['HTTP_HOST'];
 $script_path = dirname($_SERVER['SCRIPT_NAME']);
 $callback_url = rtrim($protocol . "://" . $domain . $script_path, '/') . "/zarinpal_verify.php";
 
-$description = "خرید " . $gold_amount . " سکه تراوین - " . $package['paketadi'];
+$description = "خرید " . $gold_amount . " سکه تراوین - " . $package['name'];
 
 $data = array(
     "merchant_id" => $merchant_id,
@@ -85,7 +85,7 @@ if (isset($resultData['data']['code']) && $resultData['data']['code'] == 100) {
     );
     
     // Record pending transaction in database (buygold / odemeler)
-    $database->query("INSERT INTO odemeler (`email`, `durum`, `aciklama`, `tip`, `miktar`, `anahtar`, `time`, `ip`) 
+    $database->query("INSERT INTO odemeler (`email`, `durum`, `aciklama`, `tip`, `amount`, `anahtar`, `time`, `ip`) 
         VALUES ('" . $database->RemoveXSS($session->email) . "', 'PENDING', '" . $database->RemoveXSS($description) . "', 'zarinpal', " . $gold_amount . ", '" . $authority . "', " . time() . ", '" . $_SERVER['REMOTE_ADDR'] . "')");
 
     header('Location: https://www.zarinpal.com/pg/StartPay/' . $authority);

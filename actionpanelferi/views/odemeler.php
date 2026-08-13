@@ -41,7 +41,7 @@ if($odemeler){
 				<td>'.$odeme["email"].'</td>
 				<td>'.$odeme["aciklama"].'</td>
 				<td>'.$odeme["tip"].'</td>
-				<td>'.$odeme["miktar"].'</td>
+				<td>'.$odeme["amount"].'</td>
 				<td>'.date("d-m-Y H:i:s",$odeme["time"]).'</td>
 				<td>'.$odeme["ip"].'</td>
 		</tr>

@@ -5,7 +5,7 @@ if(!defined("HLXGUVENLIK"))
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
 <?php
 
-$paketler = $database->query('SELECT * FROM paketler');
+$packages = $database->query('SELECT * FROM packages');
 ?>
 
 <style>
@@ -14,12 +14,12 @@ $paketler = $database->query('SELECT * FROM paketler');
 
 
 <div class="card">
-	<div class="card-header">PAKETLER (<?php echo count($paketler);?>) </div>
+	<div class="card-header">PACKAGES (<?php echo count($packages);?>) </div>
 	<div class="card-body table-responsive">
 		<div class="col-sm-12 text-center">
 			<button class="btn btn-primary btn-hlx" data-action="yeniPaket">PAKET EKLE</button>
 		</div>
-<table class="table" id="paketler">
+<table class="table" id="packages">
 	<thead>
 	<tr>
 		<th>PAKET ADI</th>
@@ -35,14 +35,14 @@ $paketler = $database->query('SELECT * FROM paketler');
 
 
 
-if($paketler){
+if($packages){
 
-	foreach($paketler as $paket){
+	foreach($packages as $paket){
 		echo '
 		<tr>
-				<td>'.$paket["paketadi"].'</td>
-				<td>'.$paket["fiyat"].' TL</td>
-				<td>'.$paket["miktar"].'</td>
+				<td>'.$paket["name"].'</td>
+				<td>'.$paket["price"].' TL</td>
+				<td>'.$paket["amount"].'</td>
 				<td>'.($paket["cark"]?$paket["cark"]." Hediye Çark Çevirme":"Yok").'</td>
 				<td>'.($paket["tip"]=="gold"?"Altın Paketi":"Çark Paketi").'</td>
 				<td><button class="btn btn-sm btn-success btn-hlx" data-action="paketCek" data-id="'.$paket["id"].'"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger btn-hlx" data-action="paketSil" data-id="'.$paket["id"].'"><i class="fas fa-trash"></i></button></td>
@@ -76,15 +76,15 @@ if($paketler){
 			<input type="hidden" name="ajaxAction" id="ajaxAction" value="paketKaydet">
 			<div class="form-group">
 				<label>Paket Adı</label>
-				<input type="text" name="paketadi" id="paketadi" class="form-control" placeholder="1 Altın +1 Çark Çevirme" required>
+				<input type="text" name="name" id="name" class="form-control" placeholder="1 Altın +1 Çark Çevirme" required>
 			</div>
 			<div class="form-group">
-				<label>Paket Fiyatı</label>
-				<input type="number" class="form-control" name="fiyat" id="fiyat" step="0.1" required>
+				<label>Paket Priceı</label>
+				<input type="number" class="form-control" name="price" id="price" step="0.1" required>
 			</div>
 			<div class="form-group">
-				<label>Miktar</label>
-				<input type="number" class="form-control" name="miktar" id="miktar" step="1" required>
+				<label>Amount</label>
+				<input type="number" class="form-control" name="amount" id="amount" step="1" required>
 			</div>
 			<div class="form-group">
 				<label>Çark Bonus Adet</label>
@@ -113,15 +113,15 @@ if($paketler){
 		this.value = parseFloat(this.value).toFixed(2);
 	}
 	$(document).ready(function() {
-		$('#paketler').DataTable();
+		$('#packages').DataTable();
 	} );
 	$(document).on('click','.btn-hlx', function (e) {
 		switch($(this).data('action')){
 			case 'yeniPaket':
 				$('.modal-title').text('YENİ PAKET EKLE');
-				$('#paketadi').val('');
-				$('#fiyat').val('');
-				$('#miktar').val('');
+				$('#name').val('');
+				$('#price').val('');
+				$('#amount').val('');
 				$('#cark').val('');
 				$('#tip').val('gold');
 				$('#id').val(0);
@@ -136,9 +136,9 @@ if($paketler){
 						data= jQuery.parseJSON(data);
 						if(data.status){
 							$('.modal-title').text('PAKET DÜZENLE');
-							$('#paketadi').val(data.data.paketadi);
-							$('#fiyat').val(data.data.fiyat);
-							$('#miktar').val(data.data.miktar);
+							$('#name').val(data.data.name);
+							$('#price').val(data.data.price);
+							$('#amount').val(data.data.amount);
 							$('#cark').val(data.data.cark);
 							$('#tip').val(data.data.tip);
 							$('#id').val(data.data.id);

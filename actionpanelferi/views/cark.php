@@ -51,7 +51,7 @@ if($carkHediyeler){
 		echo '
 		<tr>
 				<td>'.$cark["odul"].'</td>
-				<td>'.$cark["miktar"].'</td>
+				<td>'.$cark["amount"].'</td>
 				<td>'.$cark["oran"].'</td>
 				<td>'.$tipi.'</td>
 				<td><button class="btn btn-sm btn-success btn-hlx" data-id="'.$cark["id"].'"><i class="fas fa-edit"></i></button></td>
@@ -89,7 +89,7 @@ if($carkHediyeler){
 			</div>
 			<div class="form-group">
 				<label>ÖDÜL MİKTARI</label>
-				<input type="number" class="form-control" name="miktar" id="miktar" step="1" required>
+				<input type="number" class="form-control" name="amount" id="amount" step="1" required>
 			</div>
 			<div class="form-group">
 				<label>ÇIKMA ORANI</label>
@@ -132,7 +132,7 @@ if($carkHediyeler){
 			if(data.status){
 				$('.modal-title').text('ÖDÜL DÜZENLE');
 				$('#odul').val(data.data.odul);
-				$('#miktar').val(data.data.miktar);
+				$('#amount').val(data.data.amount);
 				$('#oran').val(data.data.oran);
 				$('#tip').val(data.data.tip);
 				$('#id').val(data.data.id);

@@ -17,7 +17,7 @@ if($is_ajax && strtolower($_SERVER['REQUEST_METHOD'])=="post"){
 
 function paketSil(){
     global $baglanDB;
-    $stmt=$baglanDB->prepare("DELETE FROM paketler WHERE id=:id");
+    $stmt=$baglanDB->prepare("DELETE FROM packages WHERE id=:id");
     $stmt->execute([':id'=>$_POST['id']]);
     if($stmt->rowCount())
         echo json_encode(['status'=>true,'message'=>"Paket Silindi."]);
@@ -27,7 +27,7 @@ function paketSil(){
 
 function paketCek(){
     global $baglanDB;
-    $stmt=$baglanDB->prepare("SELECT * FROM paketler WHERE id=:id LIMIT 1");
+    $stmt=$baglanDB->prepare("SELECT * FROM packages WHERE id=:id LIMIT 1");
     $stmt->execute([':id'=>$_POST['id']]);
     $row=$stmt->fetch(PDO::FETCH_ASSOC);
     if($row)
@@ -56,14 +56,14 @@ function vahaCek(){
 function paketKaydet(){
     global $baglanDB;
     if($_POST['id']==0){
-        $stmt=$baglanDB->prepare("INSERT INTO paketler SET paketadi = ?, fiyat = ?,miktar=?,cark=?,tip=?");
-        $stmt->execute([$_POST['paketadi'],$_POST['fiyat'],$_POST['miktar'],$_POST['cark'],$_POST['tip']]);
+        $stmt=$baglanDB->prepare("INSERT INTO packages SET name = ?, price = ?,amount=?,cark=?,tip=?");
+        $stmt->execute([$_POST['name'],$_POST['price'],$_POST['amount'],$_POST['cark'],$_POST['tip']]);
         if($stmt->rowCount())
             exit(json_encode(['status'=>true,'message'=>"Paket Eklendi"]));
         exit(json_encode(['status'=>false,'message'=>"Paket Eklenemedi"]));
     }else{
-        $stmt=$baglanDB->prepare("UPDATE paketler SET paketadi = ?, fiyat = ?,miktar=?,cark=?,tip=? WHERE id = ?");
-        $stmt->execute([$_POST['paketadi'],$_POST['fiyat'],$_POST['miktar'],$_POST['cark'],$_POST['tip'],$_POST['id']]);
+        $stmt=$baglanDB->prepare("UPDATE packages SET name = ?, price = ?,amount=?,cark=?,tip=? WHERE id = ?");
+        $stmt->execute([$_POST['name'],$_POST['price'],$_POST['amount'],$_POST['cark'],$_POST['tip'],$_POST['id']]);
         if($stmt->rowCount())
             exit(json_encode(['status'=>true,'message'=>"Paket Güncellendi"]));
         exit(json_encode(['status'=>false,'message'=>"Paket Güncellenemedi"]));
@@ -76,8 +76,8 @@ function odulKaydet(){
         exit(json_encode(['status'=>false,'message'=>'Kayıt Bulunamadı.']));
     if($_POST['oran']<1)
         exit(json_encode(['status'=>false,'message'=>'Ödül Çıkma Oranı Minimum 1 Olabilir!']));
-    $stmt=$baglanDB->prepare("UPDATE oduller SET odul = ?, oran = ?, miktar=?,tip=? WHERE id = ?");
-    $stmt->execute([$_POST['odul'],$_POST['oran'],$_POST['miktar'],$_POST['tip'],$_POST['id']]);
+    $stmt=$baglanDB->prepare("UPDATE oduller SET odul = ?, oran = ?, amount=?,tip=? WHERE id = ?");
+    $stmt->execute([$_POST['odul'],$_POST['oran'],$_POST['amount'],$_POST['tip'],$_POST['id']]);
     if($stmt->rowCount())
         exit(json_encode(['status'=>true,'message'=>"Ödül Güncellendi"]));
     exit(json_encode(['status'=>false,'message'=>"Ödül Güncellenemedi. Sebebi Ödülde Değişiklik Yapmamış Olmanız Olabilir!"]));

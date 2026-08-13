@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `odemeler` (
   `durum` varchar(255) NOT NULL,
   `aciklama` varchar(255) NOT NULL,
   `tip` varchar(50) NOT NULL,
-  `miktar` int(11) unsigned NOT NULL,
+  `amount` int(11) unsigned NOT NULL,
   `anahtar` varchar(255) NOT NULL,
   `time` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL
@@ -102,16 +102,16 @@ ALTER TABLE `odemeler` ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `odemeler` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 
-CREATE TABLE `paketler` (
+CREATE TABLE `packages` (
   `id` int(11) NOT NULL,
-  `paketadi` varchar(250) NOT NULL,
-  `fiyat` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `miktar` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(250) NOT NULL,
+  `price` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `amount` int(11) NOT NULL DEFAULT '0',
   `cark` int(11) NOT NULL DEFAULT '0',
   `tip` varchar(150) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `paketler` (`id`, `paketadi`, `fiyat`, `miktar`, `cark`, `tip`) VALUES
+INSERT INTO `packages` (`id`, `name`, `price`, `amount`, `cark`, `tip`) VALUES
 (1, '10 ÇARK ÇEVİRME', '30.00', 10, 0, 'cark'),
 (2, '20 ÇARK ÇEVİRME', '60.00', 20, 0, 'cark'),
 (3, '30 ÇARK ÇEVİRME', '90.00', 30, 0, 'cark'),
@@ -123,10 +123,10 @@ INSERT INTO `paketler` (`id`, `paketadi`, `fiyat`, `miktar`, `cark`, `tip`) VALU
 (9, '1600 ALTIN', '100.00', 1600, 4, 'gold'),
 (10, '3300 ALTIN', '200.00', 3300, 5, 'gold');
 
-ALTER TABLE `paketler`
+ALTER TABLE `packages`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `paketler`
+ALTER TABLE `packages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 CREATE TABLE IF NOT EXISTS `log` (
@@ -1206,7 +1206,7 @@ DROP TABLE IF EXISTS `oduller`;
 CREATE TABLE IF NOT EXISTS `oduller` (
   `id` int NOT NULL AUTO_INCREMENT,
   `odul` varchar(250) NOT NULL,
-  `miktar` int NOT NULL DEFAULT '0',
+  `amount` int NOT NULL DEFAULT '0',
   `tip` varchar(20) NOT NULL DEFAULT 'gold',
   `bonus` int NOT NULL DEFAULT '0',
   `durum` int NOT NULL DEFAULT '0',
@@ -1216,7 +1216,7 @@ CREATE TABLE IF NOT EXISTS `oduller` (
 ) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `oduller` (`id`, `odul`, `miktar`, `tip`, `bonus`, `durum`, `oran`, `pozisyon`) VALUES
+INSERT INTO `oduller` (`id`, `odul`, `amount`, `tip`, `bonus`, `durum`, `oran`, `pozisyon`) VALUES
 (1, '10000 Altın', 10000, 'gold', 0, 1, 1, '1.00'),
 (2, '1000 Gümüş', 1000, 'silver', 0, 1, 1, '70.00'),
 (3, '10 Altın', 10, 'gold', 0, 1, 1, '50.00'),

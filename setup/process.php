@@ -84,7 +84,7 @@ class Process {
         }
         $mysqli->set_charset("utf8");
 
-        $sql = "DROP TABLE IF EXISTS `a2b`,`odemeler`,`paketler`, `abdata`, `achiev`, `activate`, `adventure`, `alidata`, `ali_invite`, `ali_log`, `ali_permission`, `antimult`, `artefacts`, `attacks`, `auction`, `banlist`, `bdata`, `buygold`, `confs`, `critical_log`, `demolition`, `diplomacy`, `enforcement`, `farmlist`, `fdata`, `hero`, `heroface`, `heroinventory`, `heroitems`, `links`, `log`, `map_control`, `market`, `mdata`, `medal`, `movement`, `ndata`, `newproc`, `news`, `odata`, `online`, `palevo`, `password`, `prisoners`, `queue`, `raidlist`, `referals`, `research`, `roullet`, `route`, `sitters`, `spravka`, `tdata`, `training`, `units`, `users`, `vdata`, `wdata`, `config`, `codes`, `payments`, `autorenewals`, `quests`, `deleted`, `ignore`, `plusaddons`, `storage`, `support`;";
+        $sql = "DROP TABLE IF EXISTS `a2b`,`odemeler`,`packages`, `abdata`, `achiev`, `activate`, `adventure`, `alidata`, `ali_invite`, `ali_log`, `ali_permission`, `antimult`, `artefacts`, `attacks`, `auction`, `banlist`, `bdata`, `buygold`, `confs`, `critical_log`, `demolition`, `diplomacy`, `enforcement`, `farmlist`, `fdata`, `hero`, `heroface`, `heroinventory`, `heroitems`, `links`, `log`, `map_control`, `market`, `mdata`, `medal`, `movement`, `ndata`, `newproc`, `news`, `odata`, `online`, `palevo`, `password`, `prisoners`, `queue`, `raidlist`, `referals`, `research`, `roullet`, `route`, `sitters`, `spravka`, `tdata`, `training`, `units`, `users`, `vdata`, `wdata`, `config`, `codes`, `payments`, `autorenewals`, `quests`, `deleted`, `ignore`, `plusaddons`, `storage`, `support`;";
         @$mysqli->query($sql);
 
         $big = $mysqli->multi_query($p_query);
@@ -114,8 +114,8 @@ class Process {
         $sql_config = "INSERT INTO config VALUES(NULL, " . time() . ", " . time() . ", 0, 1, '', '" . $server_name . "', " . $def_gold . ", " . $auc_time . ", 'gpack/img_rtl/', " . $opening . ", 1, " . $speed . ", 1, " . $artefacts . ", " . $ww_plan . ", " . $cranny . ", 10, " . round($speed / 80) . ", " . $storage_mul . ", " . $inc_speed . ", " . $beginner . ", " . $tradercap . ", 604800, 604800, '" . $homepage . "', 'admin@test.com', 10, 100, 5, 1, 25, 400, 80, 50, 1000, 2500, 4900, 75, 150, 250, 180000000, 560000000, 1800000000, 'fa', 0, 0, 0);";
         $mysqli->query($sql_config) or die($mysqli->error);
 
-        // Seed 5 default gold coin packages into `paketler` table
-        $mysqli->query("INSERT IGNORE INTO `paketler` (`id`, `paketadi`, `fiyat`, `miktar`, `cark`, `tip`) VALUES
+        // Seed 5 default gold coin packages into `packages` table
+        $mysqli->query("INSERT IGNORE INTO `packages` (`id`, `name`, `price`, `amount`, `cark`, `tip`) VALUES
             (1, 'بسته برنزی', 25000.00, 50, 0, 'gold'),
             (2, 'بسته نقره‌ای', 50000.00, 120, 0, 'gold'),
             (3, 'بسته طلایی', 100000.00, 300, 0, 'gold'),

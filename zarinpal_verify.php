@@ -31,10 +31,10 @@ if (!$pay_record || count($pay_record) == 0) {
 } else {
     $rec = $pay_record[0];
     if ($rec['durum'] === 'SUCCESS') {
-        header("Location: plus.php?status=success&gold=" . $rec['miktar'] . "&refid=" . urlencode($authority));
+        header("Location: plus.php?status=success&gold=" . $rec['amount'] . "&refid=" . urlencode($authority));
         exit;
     }
-    $gold_amount = intval($rec['miktar']);
+    $gold_amount = intval($rec['amount']);
     $price_toman = floatval($rec['aciklama']); // Or calculated
     // Find user ID from email or session
     $user_res = $database->query("SELECT id, username FROM users WHERE email = '" . $database->RemoveXSS($rec['email']) . "' LIMIT 1");

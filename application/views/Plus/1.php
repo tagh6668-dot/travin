@@ -5,20 +5,20 @@ if (!defined('APP_PATH') && !isset($session)) {
 
 include("application/views/Plus/pmenu.php");
 
-// Fetch packages from DB (paketler table)
+// Fetch packages from DB (packages table)
 $packages_list = [];
-$res = $database->query("SELECT * FROM paketler WHERE tip='gold' ORDER BY id ASC LIMIT 5");
+$res = $database->query("SELECT * FROM packages WHERE tip='gold' ORDER BY id ASC LIMIT 5");
 if (is_array($res) && count($res) > 0) {
     $packages_list = $res;
 } else {
     // Seed default 5 packages if DB table is empty
-    $database->query("INSERT IGNORE INTO `paketler` (`id`, `paketadi`, `fiyat`, `miktar`, `cark`, `tip`) VALUES
+    $database->query("INSERT IGNORE INTO `packages` (`id`, `name`, `price`, `amount`, `cark`, `tip`) VALUES
     (1, 'بسته برنزی', 25000.00, 50, 0, 'gold'),
     (2, 'بسته نقره‌ای', 50000.00, 120, 0, 'gold'),
     (3, 'بسته طلایی', 100000.00, 300, 0, 'gold'),
     (4, 'بسته الماس', 200000.00, 700, 0, 'gold'),
     (5, 'بسته ویژه VIP', 500000.00, 2000, 0, 'gold')");
-    $packages_list = $database->query("SELECT * FROM paketler WHERE tip='gold' ORDER BY id ASC LIMIT 5");
+    $packages_list = $database->query("SELECT * FROM packages WHERE tip='gold' ORDER BY id ASC LIMIT 5");
 }
 ?>
 
@@ -136,12 +136,12 @@ if (is_array($res) && count($res) > 0) {
     <div class="gold-packages-grid">
         <?php foreach ($packages_list as $pack): ?>
             <div class="gold-card">
-                <div class="gold-card-header"><?php echo htmlspecialchars($pack['paketadi']); ?></div>
+                <div class="gold-card-header"><?php echo htmlspecialchars($pack['name']); ?></div>
                 <div class="gold-amount-badge">
-                    <?php echo number_format($pack['miktar']); ?>
+                    <?php echo number_format($pack['amount']); ?>
                     <img src="gpack/lang/en/gui/gold.gif" alt="سکه" title="سکه">
                 </div>
-                <div class="gold-price"><?php echo number_format($pack['fiyat']); ?> تومان</div>
+                <div class="gold-price"><?php echo number_format($pack['price']); ?> تومان</div>
                 <form action="zarinpal.php" method="POST">
                     <input type="hidden" name="package_id" value="<?php echo $pack['id']; ?>">
                     <button type="submit" class="gold-buy-btn">پرداخت و خرید</button>

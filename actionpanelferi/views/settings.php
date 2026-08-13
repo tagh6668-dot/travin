@@ -38,7 +38,7 @@ if (isset($_POST['update_package'])) {
     $pack_price = floatval($_POST['pack_price']);
     $pack_gold = intval($_POST['pack_gold']);
 
-    $database->query("UPDATE paketler SET paketadi = '" . $pack_name . "', fiyat = " . $pack_price . ", miktar = " . $pack_gold . " WHERE id = " . $pack_id);
+    $database->query("UPDATE packages SET name = '" . $pack_name . "', price = " . $pack_price . ", amount = " . $pack_gold . " WHERE id = " . $pack_id);
     $msg = "بسته سکه شماره " . $pack_id . " با موفقیت ویرایش شد!";
     $msg_type = "success";
 }
@@ -53,7 +53,7 @@ $def_gold = isset($cfg['DEFAULT_GOLD']) ? $cfg['DEFAULT_GOLD'] : 100;
 $srv_name = isset($cfg['SERVER_NAME']) ? $cfg['SERVER_NAME'] : 'تراوین';
 
 // Fetch Packages
-$packages = $database->query("SELECT * FROM paketler ORDER BY id ASC LIMIT 10");
+$packages = $database->query("SELECT * FROM packages ORDER BY id ASC LIMIT 10");
 ?>
 
 <div class="card" style="direction: rtl; text-align: right; font-family: Tahoma, sans-serif;">
@@ -120,13 +120,13 @@ $packages = $database->query("SELECT * FROM paketler ORDER BY id ASC LIMIT 10");
                                 <input type="hidden" name="pack_id" value="<?php echo $p['id']; ?>">
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;"><?php echo $p['id']; ?></td>
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;">
-                                    <input type="text" name="pack_name" value="<?php echo htmlspecialchars($p['paketadi']); ?>" style="width: 90%;">
+                                    <input type="text" name="pack_name" value="<?php echo htmlspecialchars($p['name']); ?>" style="width: 90%;">
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;">
-                                    <input type="number" name="pack_price" value="<?php echo $p['fiyat']; ?>" style="width: 90%;">
+                                    <input type="number" name="pack_price" value="<?php echo $p['price']; ?>" style="width: 90%;">
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;">
-                                    <input type="number" name="pack_gold" value="<?php echo $p['miktar']; ?>" style="width: 90%;">
+                                    <input type="number" name="pack_gold" value="<?php echo $p['amount']; ?>" style="width: 90%;">
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;">
                                     <button type="submit" class="btn btn-sm btn-success" style="background: #38a169; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">ذخیره تغییرات</button>
