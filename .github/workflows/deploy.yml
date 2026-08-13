@@ -1,0 +1,23 @@
+name: 🚀 Automatic Deploy to Client Host
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: 🚚 Deploy project to Talahost via FTP
+    runs-on: ubuntu-latest
+    steps:
+    - name: ⬇️ Checkout code
+      uses: actions/checkout@v3
+
+    - name: 📡 Sync files to Client Server
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: /public_html/t/
+        dangerous-clean-slave: false
