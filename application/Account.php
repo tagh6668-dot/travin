@@ -210,6 +210,7 @@ class Account {
 					$regme->unreg($dbarray[0]['username']);
 					if(OPENING > time()){
 						header('Location: login.php');
+						exit();
 					}else{
 						
 						$this->Login(1);
