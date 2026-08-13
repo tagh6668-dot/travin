@@ -7,7 +7,7 @@ include("application/views/Plus/pmenu.php");
 
 // Fetch packages from DB (paketler table)
 $packages_list = [];
-$res = $database->query("SELECT * FROM paketler ORDER BY id ASC LIMIT 5");
+$res = $database->query("SELECT * FROM paketler WHERE tip='gold' ORDER BY id ASC LIMIT 5");
 if (is_array($res) && count($res) > 0) {
     $packages_list = $res;
 } else {
@@ -18,7 +18,7 @@ if (is_array($res) && count($res) > 0) {
     (3, 'بسته طلایی', 100000.00, 300, 0, 'gold'),
     (4, 'بسته الماس', 200000.00, 700, 0, 'gold'),
     (5, 'بسته ویژه VIP', 500000.00, 2000, 0, 'gold')");
-    $packages_list = $database->query("SELECT * FROM paketler ORDER BY id ASC LIMIT 5");
+    $packages_list = $database->query("SELECT * FROM paketler WHERE tip='gold' ORDER BY id ASC LIMIT 5");
 }
 ?>
 
