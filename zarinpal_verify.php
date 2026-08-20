@@ -35,23 +35,30 @@ if (!$pay_record || count($pay_record) == 0) {
         exit;
     }
     $gold_amount = intval($rec['amount']);
-    $price_toman = floatval($rec['aciklama']); // Or calculated
+    
     // Find user ID from email or session
     $user_res = $database->query("SELECT id, username FROM users WHERE email = '" . $database->RemoveXSS($rec['email']) . "' LIMIT 1");
     if ($user_res && count($user_res) > 0) {
         $uid = $user_res[0]['id'];
         $username = $user_res[0]['username'];
     } else {
-        $uid = $session->uid;
-        $username = $session->username;
+        $uid = isset($session->uid) ? $session->uid : 0;
+        $username = isset($session->username) ? $session->username : '';
     }
 }
 
-$amount_rial = intval(($gold_amount > 0 ? $gold_amount : 100) * 10); // Default conversion if needed
-
-// Re-verify exact amount from session if present
+// Calculate amount in Rials
+$amount_rial = 0;
 if (isset($_SESSION['zarinpal_pay']['amount_toman'])) {
     $amount_rial = intval($_SESSION['zarinpal_pay']['amount_toman'] * 10);
+} else {
+    $pack_res = $database->query("SELECT price FROM packages WHERE amount = " . intval($gold_amount) . " LIMIT 1");
+    if ($pack_res && count($pack_res) > 0) {
+        $amount_rial = intval(floatval($pack_res[0]['price']) * 10);
+    }
+}
+if ($amount_rial <= 0) {
+    $amount_rial = intval($gold_amount * 1000 * 10);
 }
 
 // Get Merchant ID
@@ -100,8 +107,9 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
         $database->query("UPDATE odemeler SET durum = 'SUCCESS', aciklama = 'RefID: " . $ref_id . "' WHERE anahtar = '" . $database->RemoveXSS($authority) . "'");
         
         // Record in payments table if exists
+        $user_email = isset($rec['email']) ? $rec['email'] : (isset($session->email) ? $session->email : '');
         $database->query("INSERT INTO buygold (`email`, `tarif`, `gold`, `time`, `ip`, `status`) 
-            VALUES ('" . $database->RemoveXSS($session->email) . "', 'Z', " . $gold_amount . ", " . time() . ", '" . $_SERVER['REMOTE_ADDR'] . "', 1)");
+            VALUES ('" . $database->RemoveXSS($user_email) . "', 'Z', " . $gold_amount . ", " . time() . ", '" . $_SERVER['REMOTE_ADDR'] . "', 1)");
 
         // Send in-game confirmation message to user
         $msg_title = "شارژ حساب (خرید سکه)";

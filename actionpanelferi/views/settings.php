@@ -58,7 +58,7 @@ $packages = $database->query("SELECT * FROM packages ORDER BY id ASC LIMIT 10");
 
 <div class="card" style="direction: rtl; text-align: right; font-family: Tahoma, sans-serif;">
     <div class="card-header" style="background: #2b6cb0; color: white; font-weight: bold; padding: 12px;">
-        ⚙️ تنظیمات متمرکز سرور و قیمت سکه‌ها
+        ⚙️ تنظیمات متمرکز سرور و قیمت سکه‌‌ها
     </div>
     <div class="card-body" style="padding: 20px;">
 
@@ -68,7 +68,7 @@ $packages = $database->query("SELECT * FROM packages ORDER BY id ASC LIMIT 10");
             </div>
         <?php endif; ?>
 
-        <form action="" method="POST">
+        <form action="?p=settings" method="POST">
             <input type="hidden" name="update_settings" value="1">
             <h4 style="color: #2c3e50; border-bottom: 1px solid #cbd5e0; padding-bottom: 5px;">۱. تنظیمات عمومی و قیمت خدمات سکه</h4>
             
@@ -80,7 +80,7 @@ $packages = $database->query("SELECT * FROM packages ORDER BY id ASC LIMIT 10");
             <div class="form-group" style="margin-bottom: 15px;">
                 <label>هزینه سکه برای ⚡ تربیت فوری سربازها (Instant Troop Training Cost):</label>
                 <input type="number" name="finish_all_cost" class="form-control" value="<?php echo $finish_cost; ?>" required>
-                <small style="color: #718096;">تعداد سکه مورد نیاز جهت پایان فوری ساخت نیروها در پادگان/اصطبل/کارگاه (پیش‌فرض: 30)</small>
+                <small style="color: #718096;">تعداد سکه مورد نیاز جهت پایان فوری ساخت نیروها در پادگان/اصطبل/کارگاه (پیش‌فرض: ۳۰)</small>
             </div>
 
             <div class="form-group" style="margin-bottom: 15px;">
@@ -115,7 +115,7 @@ $packages = $database->query("SELECT * FROM packages ORDER BY id ASC LIMIT 10");
                 <?php if (is_array($packages) && count($packages) > 0): ?>
                     <?php foreach ($packages as $p): ?>
                         <tr>
-                            <form action="" method="POST">
+                            <form action="?p=settings" method="POST">
                                 <input type="hidden" name="update_package" value="1">
                                 <input type="hidden" name="pack_id" value="<?php echo $p['id']; ?>">
                                 <td style="padding: 8px; border: 1px solid #cbd5e0;"><?php echo $p['id']; ?></td>
