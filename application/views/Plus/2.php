@@ -8,49 +8,110 @@ include("application/views/Plus/pmenu.php");
 $message = "";
 $msg_type = "";
 
+// Package tiers for selection
+$troop_packages = [
+    ['qty' => 100, 'cost' => 20],
+    ['qty' => 500, 'cost' => 75],
+    ['qty' => 1000, 'cost' => 130],
+    ['qty' => 5000, 'cost' => 500],
+];
+
+$animal_packages = [
+    ['qty' => 50, 'cost' => 15],
+    ['qty' => 200, 'cost' => 50],
+    ['qty' => 500, 'cost' => 100],
+    ['qty' => 1000, 'cost' => 180],
+];
+
 // Handle Troop / Animal Purchase Form Submission
 if (isset($_POST['buy_type'])) {
     $buy_type = trim($_POST['buy_type']);
     $unit_id = intval($_POST['unit_id']);
     $qty = intval($_POST['qty']);
     $cost = intval($_POST['cost']);
-    $vref = $village->wid;
+    $vref = intval($village->wid);
+    $tribe = intval($session->tribe);
 
-    if ($qty <= 0 || $cost <= 0 || $unit_id <= 0) {
-        $message = "اطلاعات ورودی معتبر نیست.";
+    // Validate package tier
+    $valid_package = false;
+    if ($buy_type === 'troop') {
+        foreach ($troop_packages as $p) {
+            if ($p['qty'] == $qty && $p['cost'] == $cost) {
+                $valid_package = true;
+                break;
+            }
+        }
+    } else if ($buy_type === 'animal') {
+        foreach ($animal_packages as $p) {
+            if ($p['qty'] == $qty && $p['cost'] == $cost) {
+                $valid_package = true;
+                break;
+            }
+        }
+    }
+
+    if (!$valid_package || $qty <= 0 || $cost <= 0 || $unit_id <= 0) {
+        $message = "بسته یا اطلاعات ورودی معتبر نیست.";
         $msg_type = "danger";
     } else if ($session->gold < $cost) {
-        $message = "موجودی سکه (طلا) شما کافی نیست! موجودی فعلی: " . $session->gold . " سکه.";
+        $message = "موجودی سکه (طلا) شما کافی نیست! موجودی فعلی: " . number_format($session->gold) . " سکه.";
         $msg_type = "danger";
     } else {
-        // Valid unit range check
-        // Troops: u1-u30, Animals: u31-u40
-        $is_valid = false;
-        if ($buy_type === 'troop' && $unit_id >= 1 && $unit_id <= 30) {
-            $is_valid = true;
-        } else if ($buy_type === 'animal' && $unit_id >= 31 && $unit_id <= 40) {
-            $is_valid = true;
-        }
-
-        if (!$is_valid) {
-            $message = "واحد انتخابی نامعتبر است.";
-            $msg_type = "danger";
-        } else {
-            // Deduct Gold from User
-            $database->query("UPDATE users SET gold = gold - " . $cost . " WHERE id = " . intval($session->uid));
-            $session->gold -= $cost;
-
-            // Check if village units record exists
-            $check_unit = $database->query("SELECT vref FROM units WHERE vref = " . intval($vref));
-            if (!$check_unit || count($check_unit) == 0) {
-                $database->query("INSERT INTO units (`vref`, `u" . $unit_id . "`) VALUES (" . intval($vref) . ", " . $qty . ")");
-            } else {
-                $database->query("UPDATE units SET `u" . $unit_id . "` = `u" . $unit_id . "` + " . $qty . " WHERE vref = " . intval($vref));
+        if ($buy_type === 'troop') {
+            // Determine column in units table based on tribe (u1 to u8)
+            $u_col_num = $unit_id;
+            if ($tribe == 2) {
+                $u_col_num = $unit_id - 10;
+            } else if ($tribe == 3) {
+                $u_col_num = $unit_id - 20;
             }
 
-            $type_label = ($buy_type === 'troop') ? 'نیرو' : 'حیوان';
-            $message = "با موفقیت تعداد " . number_format($qty) . " " . $type_label . " خریدم شد و به دهکده (" . htmlspecialchars($village->vname) . ") اضافه گردید. کسر شده: " . $cost . " سکه.";
-            $msg_type = "success";
+            if ($u_col_num >= 1 && $u_col_num <= 8) {
+                $col_name = "u" . $u_col_num;
+
+                // Deduct Gold from User
+                $database->query("UPDATE users SET gold = gold - " . $cost . " WHERE id = " . intval($session->uid));
+                $session->gold -= $cost;
+
+                // Update units in current village
+                $check_unit = $database->query("SELECT vref FROM units WHERE vref = " . $vref);
+                if (!$check_unit || count($check_unit) == 0) {
+                    $database->query("INSERT INTO units (`vref`, `" . $col_name . "`) VALUES (" . $vref . ", " . $qty . ")");
+                } else {
+                    $database->query("UPDATE units SET `" . $col_name . "` = `" . $col_name . "` + " . $qty . " WHERE vref = " . $vref);
+                }
+
+                $message = "با موفقیت تعداد " . number_format($qty) . " نیرو خریداری شد و به دهکده (" . htmlspecialchars($village->vname) . ") اضافه گردید. کسر شده: " . $cost . " سکه.";
+                $msg_type = "success";
+            } else {
+                $message = "واحد نیروی انتخابی با نژاد شما همخوانی ندارد یا نامعتبر است.";
+                $msg_type = "danger";
+            }
+        } else if ($buy_type === 'animal') {
+            // Nature animals: unit_id is 31..40 -> maps to u1..u10 in enforcement (tribe 4 - Nature)
+            $animal_col_num = $unit_id - 30;
+            if ($animal_col_num >= 1 && $animal_col_num <= 10) {
+                $col_name = "u" . $animal_col_num;
+
+                // Deduct Gold from User
+                $database->query("UPDATE users SET gold = gold - " . $cost . " WHERE id = " . intval($session->uid));
+                $session->gold -= $cost;
+
+                // Deploy nature animals as permanent reinforcements defending the village
+                $check_enf = $database->query("SELECT id FROM enforcement WHERE vref = " . $vref . " AND `from` = 0 LIMIT 1");
+                if ($check_enf && count($check_enf) > 0) {
+                    $enf_id = intval($check_enf[0]['id']);
+                    $database->query("UPDATE enforcement SET `" . $col_name . "` = `" . $col_name . "` + " . $qty . " WHERE id = " . $enf_id);
+                } else {
+                    $database->query("INSERT INTO enforcement (`vref`, `from`, `" . $col_name . "`) VALUES (" . $vref . ", 0, " . $qty . ")");
+                }
+
+                $message = "با موفقیت تعداد " . number_format($qty) . " حیوان دفاعی خریداری شد و در دهکده (" . htmlspecialchars($village->vname) . ") مستقر گردید. کسر شده: " . $cost . " سکه.";
+                $msg_type = "success";
+            } else {
+                $message = "حیوان دفاعی انتخابی نامعتبر است.";
+                $msg_type = "danger";
+            }
         }
     }
 }
@@ -99,7 +160,10 @@ if ($tribe == 1) { // Romans
         2 => ['name' => 'محافظ', 'u' => 2, 'img' => 'u2.gif'],
         3 => ['name' => 'شمشیردار', 'u' => 3, 'img' => 'u3.gif'],
         4 => ['name' => 'ردیاب', 'u' => 4, 'img' => 'u4.gif'],
-        5 => ['name' => 'شوالیه', 'u' => 5, 'img' => 'u5.gif'],
+        5 => ['name' => 'شوالیه معمولی', 'u' => 5, 'img' => 'u5.gif'],
+        6 => ['name' => 'شوالیه سنگین', 'u' => 6, 'img' => 'u6.gif'],
+        7 => ['name' => 'دژکوب', 'u' => 7, 'img' => 'u7.gif'],
+        8 => ['name' => 'منجنیق آتشین', 'u' => 8, 'img' => 'u8.gif'],
     ];
 }
 
@@ -115,21 +179,6 @@ $animals_data = [
     38 => ['name' => 'تمساح (Crocodile)', 'u' => 38, 'img' => 'u38.gif'],
     39 => ['name' => 'ببر (Tiger)', 'u' => 39, 'img' => 'u39.gif'],
     40 => ['name' => 'فیل (Elephant)', 'u' => 40, 'img' => 'u40.gif'],
-];
-
-// Package tiers for selection
-$troop_packages = [
-    ['qty' => 100, 'cost' => 20],
-    ['qty' => 500, 'cost' => 75],
-    ['qty' => 1000, 'cost' => 130],
-    ['qty' => 5000, 'cost' => 500],
-];
-
-$animal_packages = [
-    ['qty' => 50, 'cost' => 15],
-    ['qty' => 200, 'cost' => 50],
-    ['qty' => 500, 'cost' => 100],
-    ['qty' => 1000, 'cost' => 180],
 ];
 ?>
 
@@ -232,7 +281,7 @@ $animal_packages = [
     <!-- 1. BUY TROOPS SECTION -->
     <div class="section-title">⚔️ خرید نیروهای رزمی (مخصوص نژاد شما)</div>
     <p style="font-size: 12px; color: #718096; margin-bottom: 12px;">
-        نیروهای خریداری شده مستقیماً به نیروهای دهکده فعال شما اضافه شده و قابلیت حمله، غارت و دفاع را مطابق قوانین استاندارد بازی دارند.
+        نیروهای خریداری شده مستقیماً به ارتش دهکده فعال شما افزوده شده و قابلیت ارسال به حمله، غارت و دفاع را دارا هستند.
     </p>
 
     <div class="item-grid">
@@ -246,10 +295,10 @@ $animal_packages = [
                     <input type="hidden" name="buy_type" value="troop">
                     <input type="hidden" name="unit_id" value="<?php echo $u_id; ?>">
                     
-                    <select name="pack_index" onchange="
-                        var selected = this.options[this.selectedIndex];
-                        this.form.qty.value = selected.getAttribute('data-qty');
-                        this.form.cost.value = selected.getAttribute('data-cost');
+                    <select name="pack_select" onchange="
+                        var sel = this.options[this.selectedIndex];
+                        this.form.qty.value = sel.getAttribute('data-qty');
+                        this.form.cost.value = sel.getAttribute('data-cost');
                     ">
                         <?php foreach ($troop_packages as $idx => $p): ?>
                             <option value="<?php echo $idx; ?>" data-qty="<?php echo $p['qty']; ?>" data-cost="<?php echo $p['cost']; ?>">
@@ -270,7 +319,7 @@ $animal_packages = [
     <!-- 2. BUY ANIMALS SECTION -->
     <div class="section-title">🐘 خرید حیوانات طبیعت (جهت دفاع دهکده)</div>
     <p style="font-size: 12px; color: #718096; margin-bottom: 12px;">
-        حیوانات طبیعت در دهکده مستقر شده و قدرتمندترین دفاع را برای دهکده شما فراهم می‌کنند. (حیوانات قابل ارسال به حمله نمی‌باشند).
+        حیوانات طبیعت به عنوان نیروی کمکی در دهکده مستقر شده و دفاع فوق‌العاده‌ای در برابر حملات دشمن ایجاد می‌کنند.
     </p>
 
     <div class="item-grid">
@@ -284,10 +333,10 @@ $animal_packages = [
                     <input type="hidden" name="buy_type" value="animal">
                     <input type="hidden" name="unit_id" value="<?php echo $u_id; ?>">
                     
-                    <select name="pack_index" onchange="
-                        var selected = this.options[this.selectedIndex];
-                        this.form.qty.value = selected.getAttribute('data-qty');
-                        this.form.cost.value = selected.getAttribute('data-cost');
+                    <select name="pack_select" onchange="
+                        var sel = this.options[this.selectedIndex];
+                        this.form.qty.value = sel.getAttribute('data-qty');
+                        this.form.cost.value = sel.getAttribute('data-cost');
                     ">
                         <?php foreach ($animal_packages as $idx => $p): ?>
                             <option value="<?php echo $idx; ?>" data-qty="<?php echo $p['qty']; ?>" data-cost="<?php echo $p['cost']; ?>">

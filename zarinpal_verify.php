@@ -106,7 +106,7 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
         // Send in-game confirmation message to user
         $msg_title = "شارژ حساب (خرید سکه)";
         $msg_body = "با تشکر، حساب شما با موفقیت به میزان " . number_format($gold_amount) . " سکه شارژ گردید.\nکد پیگیری تراکنش زرین‌پال: " . $ref_id;
-        $database->sendMessage($uid, 6, $msg_title, $msg_body, 0, 0, 0, 0, 0);
+        $database->sendMessage($uid, 6, $msg_title, $msg_body, 0, 0, 0, 0);
     }
     
     unset($_SESSION['zarinpal_pay']);
