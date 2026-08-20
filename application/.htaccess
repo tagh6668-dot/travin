@@ -1,7 +1,3 @@
 <Files "config.php">
 Require all denied
 </Files>
-AuthType Basic
-AuthName "Protected Area"
-AuthUserFile /home/steamse2/.htpasswd
-Require valid-user

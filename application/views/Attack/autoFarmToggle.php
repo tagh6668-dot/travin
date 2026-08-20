@@ -1,8 +1,11 @@
 <?php
-include("include("/home/steamse2/c/config.php");
-");
+if (!defined('APP_PATH') && !isset($database)) {
+    include_once(dirname(__DIR__, 2) . "/Database.php");
+}
 
-$slot = intval($_POST['slot']);
-$state = intval($_POST['state']);
+$slot = isset($_POST['slot']) ? intval($_POST['slot']) : 0;
+$state = isset($_POST['state']) ? intval($_POST['state']) : 0;
 
-mysqli_query($link,"UPDATE raidlist SET autofarm=$state WHERE id=$slot");
+if ($slot > 0 && isset($database)) {
+    $database->query("UPDATE raidlist SET autofarm=" . $state . " WHERE id=" . $slot);
+}

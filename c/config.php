@@ -166,17 +166,21 @@ $config = array(
     'resources03A' => $sData['resources03A'], // quantity Resources 
 );
 $packages=[];
-$paketler=$baglanDB->query('SELECT * FROM paketler')->fetchAll(PDO::FETCH_ASSOC);
-if(count($paketler)){
-    foreach($paketler as $paket){
-        $packages[$paket['id']]=[
-            'paket'=>$paket['paketadi'],
-            'fiyat'=>$paket['fiyat'],
-            'miktar'=>$paket['miktar'],
-            'tip'=>$paket['tip'],
-            'cark'=>$paket['cark'],
-        ];
-    }
+if (isset($baglanDB) && $baglanDB) {
+    try {
+        $pkgs = $baglanDB->query('SELECT * FROM packages')->fetchAll(PDO::FETCH_ASSOC);
+        if ($pkgs && count($pkgs)) {
+            foreach ($pkgs as $p) {
+                $packages[$p['id']] = [
+                    'paket' => isset($p['name']) ? $p['name'] : (isset($p['paketadi']) ? $p['paketadi'] : ''),
+                    'fiyat' => isset($p['price']) ? $p['price'] : (isset($p['fiyat']) ? $p['fiyat'] : 0),
+                    'miktar' => isset($p['amount']) ? $p['amount'] : (isset($p['miktar']) ? $p['miktar'] : 0),
+                    'tip' => isset($p['tip']) ? $p['tip'] : 'gold',
+                    'cark' => isset($p['cark']) ? $p['cark'] : 0,
+                ];
+            }
+        }
+    } catch(Exception $e) {}
 }
 
 

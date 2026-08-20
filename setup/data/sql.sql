@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS `config` (
   `Lang` text NOT NULL,
   `fvillage` int(11) NOT NULL,
   `fvillaged` int(11) NOT NULL,
-  `catapult_c` tinyint(1) NOT NULL DEFAULT '0'
+  `catapult_c` tinyint(1) NOT NULL DEFAULT '0',
+  `FINISH_ALL_COST` int(11) NOT NULL DEFAULT '30',
+  `zarinpal_merchant` varchar(100) NOT NULL DEFAULT 'b027468f-bd1d-4d48-9f6d-9038aa9ad46c'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `config`
@@ -112,22 +114,17 @@ CREATE TABLE `packages` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `packages` (`id`, `name`, `price`, `amount`, `cark`, `tip`) VALUES
-(1, '10 ÇARK ÇEVİRME', '30.00', 10, 0, 'cark'),
-(2, '20 ÇARK ÇEVİRME', '60.00', 20, 0, 'cark'),
-(3, '30 ÇARK ÇEVİRME', '90.00', 30, 0, 'cark'),
-(4, '40 ÇARK ÇEVİRME', '120.00', 40, 0, 'cark'),
-(5, '50 ÇARK ÇEVİRME', '140.00', 50, 0, 'cark'),
-(6, '100 ALTIN', '10.00', 10, 1, 'gold'),
-(7, '250 ALTIN', '20.00', 250, 2, 'gold'),
-(8, '600 ALTIN', '40.00', 600, 3, 'gold'),
-(9, '1600 ALTIN', '100.00', 1600, 4, 'gold'),
-(10, '3300 ALTIN', '200.00', 3300, 5, 'gold');
+(1, 'بسته برنزی', 25000.00, 50, 0, 'gold'),
+(2, 'بسته نقره‌ای', 50000.00, 120, 0, 'gold'),
+(3, 'بسته طلایی', 100000.00, 300, 0, 'gold'),
+(4, 'بسته الماس', 200000.00, 700, 0, 'gold'),
+(5, 'بسته ویژه VIP', 500000.00, 2000, 0, 'gold');
 
 ALTER TABLE `packages`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

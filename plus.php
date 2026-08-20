@@ -1,7 +1,7 @@
 <?php
 include_once "application/Account.php";
 
-if (!$session->login) {
+if (!$session->logged_in) {
     header("Location: login.php");
     exit;
 }
