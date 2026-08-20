@@ -141,7 +141,7 @@ Class Plus{
     }
 
     function finishTraining(){
-        if(FINISH_ALL <= $this->session->gold){
+        if(FINISH_ALL && FINISH_ALL_COST <= $this->session->gold){
             $this->database->fastTraining($this->uid, $this->vid);
 
             return $this->reloadPage();
