@@ -170,3 +170,59 @@ div.village1 table#movements div.mov {
 div.player .description1, div.player .description2 {
   overflow: hidden;
 }
+
+
+/* ==========================================================================
+   Mobile Responsive Rules (سازگاری با گوشی‌های موبایل)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+  #bodyWrapper, #background, #center, #contentOuterContainer {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 2px !important;
+    box-sizing: border-box !important;
+    float: none !important;
+  }
+
+  .contentContainer, #content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 5px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Responsive Tables */
+  table {
+    display: block !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Responsive Navigation Tabs */
+  .contentNavi.subNavi {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  
+  .contentNavi .container {
+    flex: 1 1 auto !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Form Elements */
+  input[type="text"], input[type="password"], input[type="number"], select, button {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Sidebar Adjustment for Mobile */
+  #sidebarBeforeContent, #sidebarAfterContent {
+    position: static !important;
+    width: 100% !important;
+    float: none !important;
+    margin-top: 10px !important;
+  }
+}
