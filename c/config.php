@@ -7,10 +7,11 @@ error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 //////////////////////////////////
 //    ****  SQL SETTINGS  ****  //
 //////////////////////////////////
-define('ROOT_PATH', dirname(__DIR__));
-define('CONFIG_PATH', __DIR__);
-define('APP_PATH', ROOT_PATH . '/application/');
-define('APP_BASE_PATH', ROOT_PATH . '/application');
+if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(__DIR__));
+if (!defined('CONFIG_PATH')) define('CONFIG_PATH', __DIR__);
+if (!defined('APP_PATH')) define('APP_PATH', ROOT_PATH . '/application/');
+if (!defined('APP_BASE_PATH')) define('APP_BASE_PATH', ROOT_PATH . '/application');
+if (!defined('APP_MAIN_PATH')) define('APP_MAIN_PATH', dirname(realpath(__DIR__)));
 
 
 //////////////////////////////////
@@ -29,9 +30,6 @@ try {
 } catch(PDOException $e) {
     $baglanDB=false;
 }
-
-define('APP_MAIN_PATH', dirname(realpath(__DIR__)));
-define('APP_BASE_PATH', realpath(__DIR__));
 include_once(realpath(__DIR__)."/DB.php");
 $sData = [];
 if ($baglanDB && isset($db)) {
