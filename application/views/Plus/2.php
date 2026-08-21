@@ -27,10 +27,23 @@ $animal_packages = [
 if (isset($_POST['buy_type'])) {
     $buy_type = trim($_POST['buy_type']);
     $unit_id = intval($_POST['unit_id']);
-    $qty = intval($_POST['qty']);
-    $cost = intval($_POST['cost']);
     $vref = intval($village->wid);
     $tribe = intval($session->tribe);
+
+    $qty = isset($_POST['qty']) ? intval($_POST['qty']) : 0;
+    $cost = isset($_POST['cost']) ? intval($_POST['cost']) : 0;
+
+    // If pack_select index was passed, use exact tier data for safety
+    if (isset($_POST['pack_select'])) {
+        $pack_idx = intval($_POST['pack_select']);
+        if ($buy_type === 'troop' && isset($troop_packages[$pack_idx])) {
+            $qty = $troop_packages[$pack_idx]['qty'];
+            $cost = $troop_packages[$pack_idx]['cost'];
+        } else if ($buy_type === 'animal' && isset($animal_packages[$pack_idx])) {
+            $qty = $animal_packages[$pack_idx]['qty'];
+            $cost = $animal_packages[$pack_idx]['cost'];
+        }
+    }
 
     // Validate package tier
     $valid_package = false;
