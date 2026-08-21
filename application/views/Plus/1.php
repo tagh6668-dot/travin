@@ -139,7 +139,7 @@ if (is_array($res) && count($res) > 0) {
                 <div class="gold-card-header"><?php echo htmlspecialchars($pack['name']); ?></div>
                 <div class="gold-amount-badge">
                     <?php echo number_format($pack['amount']); ?>
-                    <img src="gpack/lang/en/gui/gold.gif" alt="سکه" title="سکه">
+                    <img src="img/admin/gold.gif" alt="سکه" title="سکه" onerror="this.src='gpack/img_rtl/a/gold.gif'">
                 </div>
                 <div class="gold-price"><?php echo number_format($pack['price']); ?> تومان</div>
                 <form action="zarinpal.php" method="POST">
@@ -151,6 +151,6 @@ if (is_array($res) && count($res) > 0) {
     </div>
 
     <div class="zarinpal-logo">
-        <p>🔒 پرداخت امن متصل به درگاه شاخس زرین‌پال (ZarinPal)</p>
+        <p>🔒 پرداخت امن متصل به درگاه شاپرک زرین‌پال (ZarinPal)</p>
     </div>
 </div>

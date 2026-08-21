@@ -135,63 +135,63 @@ $troops_data = [];
 
 if ($tribe == 1) { // Romans
     $troops_data = [
-        1 => ['name' => 'سرباز پیاده (Legionnaire)', 'u' => 1, 'img' => 'u1.gif'],
-        2 => ['name' => 'محافظ (Praetorian)', 'u' => 2, 'img' => 'u2.gif'],
-        3 => ['name' => 'شمشیردار (Imperian)', 'u' => 3, 'img' => 'u3.gif'],
-        4 => ['name' => 'ردیاب (Equites Legati)', 'u' => 4, 'img' => 'u4.gif'],
-        5 => ['name' => 'شوالیه معمولی (Equites Imperatoris)', 'u' => 5, 'img' => 'u5.gif'],
-        6 => ['name' => 'شوالیه سنگین (Equites Caesaris)', 'u' => 6, 'img' => 'u6.gif'],
-        7 => ['name' => 'دژکوب (Ram)', 'u' => 7, 'img' => 'u7.gif'],
-        8 => ['name' => 'منجنیق آتشین (Fire Catapult)', 'u' => 8, 'img' => 'u8.gif'],
+        1 => ['name' => 'سرباز پیاده (Legionnaire)', 'u' => 1],
+        2 => ['name' => 'محافظ (Praetorian)', 'u' => 2],
+        3 => ['name' => 'شمشیردار (Imperian)', 'u' => 3],
+        4 => ['name' => 'ردیاب (Equites Legati)', 'u' => 4],
+        5 => ['name' => 'شوالیه معمولی (Equites Imperatoris)', 'u' => 5],
+        6 => ['name' => 'شوالیه سنگین (Equites Caesaris)', 'u' => 6],
+        7 => ['name' => 'دژکوب (Ram)', 'u' => 7],
+        8 => ['name' => 'منجنیق آتشین (Fire Catapult)', 'u' => 8],
     ];
 } else if ($tribe == 2) { // Teutons
     $troops_data = [
-        11 => ['name' => 'گرزدار (Clubswinger)', 'u' => 11, 'img' => 'u11.gif'],
-        12 => ['name' => 'نیزه‌دار (Spearman)', 'u' => 12, 'img' => 'u12.gif'],
-        13 => ['name' => 'تبرزن (Axeman)', 'u' => 13, 'img' => 'u13.gif'],
-        14 => ['name' => 'جاسوس (Scout)', 'u' => 14, 'img' => 'u14.gif'],
-        15 => ['name' => 'دلاور (Paladin)', 'u' => 15, 'img' => 'u15.gif'],
-        16 => ['name' => 'شوالیه توتون (Teutonic Knight)', 'u' => 16, 'img' => 'u16.gif'],
-        17 => ['name' => 'دژکوب (Ram)', 'u' => 17, 'img' => 'u17.gif'],
-        18 => ['name' => 'منجنیق (Catapult)', 'u' => 18, 'img' => 'u18.gif'],
+        11 => ['name' => 'گرزدار (Clubswinger)', 'u' => 11],
+        12 => ['name' => 'نیزه‌دار (Spearman)', 'u' => 12],
+        13 => ['name' => 'تبرزن (Axeman)', 'u' => 13],
+        14 => ['name' => 'جاسوس (Scout)', 'u' => 14],
+        15 => ['name' => 'دلاور (Paladin)', 'u' => 15],
+        16 => ['name' => 'شوالیه توتون (Teutonic Knight)', 'u' => 16],
+        17 => ['name' => 'دژکوب (Ram)', 'u' => 17],
+        18 => ['name' => 'منجنیق (Catapult)', 'u' => 18],
     ];
 } else if ($tribe == 3) { // Gauls
     $troops_data = [
-        21 => ['name' => 'فالانکس (Phalanx)', 'u' => 21, 'img' => 'u21.gif'],
-        22 => ['name' => 'شمشیرزن (Swordsman)', 'u' => 22, 'img' => 'u22.gif'],
-        23 => ['name' => 'ردیاب (Pathfinder)', 'u' => 23, 'img' => 'u23.gif'],
-        24 => ['name' => 'رعد توتاتس (Theutates Thunder)', 'u' => 24, 'img' => 'u24.gif'],
-        25 => ['name' => 'شوالیه دروید (Druidrider)', 'u' => 25, 'img' => 'u25.gif'],
-        26 => ['name' => 'حاکم (Haeduan)', 'u' => 26, 'img' => 'u26.gif'],
-        27 => ['name' => 'دژکوب (Ram)', 'u' => 27, 'img' => 'u27.gif'],
-        28 => ['name' => 'منجنیق (Trebuchet)', 'u' => 28, 'img' => 'u28.gif'],
+        21 => ['name' => 'فالانکس (Phalanx)', 'u' => 21],
+        22 => ['name' => 'شمشیرزن (Swordsman)', 'u' => 22],
+        23 => ['name' => 'ردیاب (Pathfinder)', 'u' => 23],
+        24 => ['name' => 'رعد توتاتس (Theutates Thunder)', 'u' => 24],
+        25 => ['name' => 'شوالیه دروید (Druidrider)', 'u' => 25],
+        26 => ['name' => 'حاکم (Haeduan)', 'u' => 26],
+        27 => ['name' => 'دژکوب (Ram)', 'u' => 27],
+        28 => ['name' => 'منجنیق (Trebuchet)', 'u' => 28],
     ];
 } else {
     // Default fallback (Romans)
     $troops_data = [
-        1 => ['name' => 'سرباز پیاده', 'u' => 1, 'img' => 'u1.gif'],
-        2 => ['name' => 'محافظ', 'u' => 2, 'img' => 'u2.gif'],
-        3 => ['name' => 'شمشیردار', 'u' => 3, 'img' => 'u3.gif'],
-        4 => ['name' => 'ردیاب', 'u' => 4, 'img' => 'u4.gif'],
-        5 => ['name' => 'شوالیه معمولی', 'u' => 5, 'img' => 'u5.gif'],
-        6 => ['name' => 'شوالیه سنگین', 'u' => 6, 'img' => 'u6.gif'],
-        7 => ['name' => 'دژکوب', 'u' => 7, 'img' => 'u7.gif'],
-        8 => ['name' => 'منجنیق آتشین', 'u' => 8, 'img' => 'u8.gif'],
+        1 => ['name' => 'سرباز پیاده', 'u' => 1],
+        2 => ['name' => 'محافظ', 'u' => 2],
+        3 => ['name' => 'شمشیردار', 'u' => 3],
+        4 => ['name' => 'ردیاب', 'u' => 4],
+        5 => ['name' => 'شوالیه معمولی', 'u' => 5],
+        6 => ['name' => 'شوالیه سنگین', 'u' => 6],
+        7 => ['name' => 'دژکوب', 'u' => 7],
+        8 => ['name' => 'منجنیق آتشین', 'u' => 8],
     ];
 }
 
 // Animals Data
 $animals_data = [
-    31 => ['name' => 'موش (Rat)', 'u' => 31, 'img' => 'u31.gif'],
-    32 => ['name' => 'عنکبوت (Spider)', 'u' => 32, 'img' => 'u32.gif'],
-    33 => ['name' => 'مار (Snake)', 'u' => 33, 'img' => 'u33.gif'],
-    34 => ['name' => 'خفاش (Bat)', 'u' => 34, 'img' => 'u34.gif'],
-    35 => ['name' => 'گراز (Wild Boar)', 'u' => 35, 'img' => 'u35.gif'],
-    36 => ['name' => 'گرگ (Wolf)', 'u' => 36, 'img' => 'u36.gif'],
-    37 => ['name' => 'خرس (Bear)', 'u' => 37, 'img' => 'u37.gif'],
-    38 => ['name' => 'تمساح (Crocodile)', 'u' => 38, 'img' => 'u38.gif'],
-    39 => ['name' => 'ببر (Tiger)', 'u' => 39, 'img' => 'u39.gif'],
-    40 => ['name' => 'فیل (Elephant)', 'u' => 40, 'img' => 'u40.gif'],
+    31 => ['name' => 'موش (Rat)', 'u' => 31],
+    32 => ['name' => 'عنکبوت (Spider)', 'u' => 32],
+    33 => ['name' => 'مار (Snake)', 'u' => 33],
+    34 => ['name' => 'خفاش (Bat)', 'u' => 34],
+    35 => ['name' => 'گراز (Wild Boar)', 'u' => 35],
+    36 => ['name' => 'گرگ (Wolf)', 'u' => 36],
+    37 => ['name' => 'خرس (Bear)', 'u' => 37],
+    38 => ['name' => 'تمساح (Crocodile)', 'u' => 38],
+    39 => ['name' => 'ببر (Tiger)', 'u' => 39],
+    40 => ['name' => 'فیل (Elephant)', 'u' => 40],
 ];
 ?>
 
@@ -245,9 +245,8 @@ $animals_data = [
     margin-bottom: 10px;
 }
 
-.item-card-header img {
-    width: 24px;
-    height: 24px;
+.item-card-header img.unit {
+    vertical-align: middle;
 }
 
 .pack-select-form {
@@ -280,14 +279,14 @@ $animals_data = [
 
 <div class="shop-section-container">
     <?php if (!empty($message)): ?>
-        <div class="alert-box alert-box-<?php echo $msg_type; ?>">
+        <div class="alert-box alert-box-<?php echo $msg_type; ?> themsg">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
 
     <div style="background: #edf2f7; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
         موجودی طلا (سکه) شما: <strong><?php echo number_format($session->gold); ?></strong>
-        <img src="gpack/lang/en/gui/gold.gif" style="vertical-align:middle;">
+        <img src="img/admin/gold.gif" style="vertical-align:middle;" alt="طلا" onerror="this.src='gpack/img_rtl/a/gold.gif'">
         | دهکده فعلی: <strong><?php echo htmlspecialchars($village->vname); ?></strong>
     </div>
 
@@ -301,7 +300,7 @@ $animals_data = [
         <?php foreach ($troops_data as $u_id => $u_info): ?>
             <div class="item-card">
                 <div class="item-card-header">
-                    <img src="img/un/u/<?php echo $u_info['img']; ?>" alt="<?php echo htmlspecialchars($u_info['name']); ?>" onerror="this.src='img/x.gif'">
+                    <img class="unit u<?php echo $u_id; ?>" src="img/x.gif" alt="<?php echo htmlspecialchars($u_info['name']); ?>">
                     <span><?php echo htmlspecialchars($u_info['name']); ?></span>
                 </div>
                 <form method="POST" action="" class="pack-select-form">
@@ -339,7 +338,7 @@ $animals_data = [
         <?php foreach ($animals_data as $u_id => $u_info): ?>
             <div class="item-card">
                 <div class="item-card-header">
-                    <img src="img/un/u/<?php echo $u_info['img']; ?>" alt="<?php echo htmlspecialchars($u_info['name']); ?>" onerror="this.src='img/x.gif'">
+                    <img class="unit u<?php echo $u_id; ?>" src="img/x.gif" alt="<?php echo htmlspecialchars($u_info['name']); ?>">
                     <span><?php echo htmlspecialchars($u_info['name']); ?></span>
                 </div>
                 <form method="POST" action="" class="pack-select-form">
