@@ -36,14 +36,19 @@ if (!$pay_record || count($pay_record) == 0) {
     }
     $gold_amount = intval($rec['amount']);
     
-    // Find user ID from email or session
-    $user_res = $database->query("SELECT id, username FROM users WHERE email = '" . $database->RemoveXSS($rec['email']) . "' LIMIT 1");
-    if ($user_res && count($user_res) > 0) {
-        $uid = $user_res[0]['id'];
-        $username = $user_res[0]['username'];
+    // Prioritize logged-in session user ID, otherwise lookup by recorded email
+    if (isset($session->uid) && $session->uid > 0) {
+        $uid = $session->uid;
+        $username = $session->username;
     } else {
-        $uid = isset($session->uid) ? $session->uid : 0;
-        $username = isset($session->username) ? $session->username : '';
+        $user_res = $database->query("SELECT id, username FROM users WHERE email = '" . $database->RemoveXSS($rec['email']) . "' LIMIT 1");
+        if ($user_res && count($user_res) > 0) {
+            $uid = $user_res[0]['id'];
+            $username = $user_res[0]['username'];
+        } else {
+            $uid = 0;
+            $username = '';
+        }
     }
 }
 
@@ -105,6 +110,10 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
     // Credit gold to user
     if ($uid > 0 && $gold_amount > 0) {
         $database->query("UPDATE users SET gold = gold + " . $gold_amount . " WHERE id = " . intval($uid));
+        
+        if (isset($session) && isset($session->uid) && $session->uid == $uid) {
+            $session->gold += $gold_amount;
+        }
         
         // Update payment record in database
         $database->query("UPDATE odemeler SET durum = 'SUCCESS', aciklama = 'RefID: " . $ref_id . "' WHERE anahtar = '" . $database->RemoveXSS($authority) . "'");
