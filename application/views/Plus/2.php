@@ -110,13 +110,17 @@ if (isset($_POST['buy_type'])) {
                 $database->query("UPDATE users SET gold = gold - " . $cost . " WHERE id = " . intval($session->uid));
                 $session->gold -= $cost;
 
-                // Deploy nature animals as permanent reinforcements defending the village
-                $check_enf = $database->query("SELECT id FROM enforcement WHERE vref = " . $vref . " AND `from` = 0 LIMIT 1");
+                // Find Natureland base village wref if exists for owner 2
+                $check_nature_village = $database->query("SELECT wref FROM vdata WHERE owner = 2 LIMIT 1");
+                $nature_wref = ($check_nature_village && count($check_nature_village) > 0) ? intval($check_nature_village[0]['wref']) : 0;
+
+                // Deploy nature animals as reinforcements defending the village
+                $check_enf = $database->query("SELECT id FROM enforcement WHERE vref = " . $vref . " AND (`from` = " . $nature_wref . " OR `from` = 0) LIMIT 1");
                 if ($check_enf && count($check_enf) > 0) {
                     $enf_id = intval($check_enf[0]['id']);
                     $database->query("UPDATE enforcement SET `" . $col_name . "` = `" . $col_name . "` + " . $qty . " WHERE id = " . $enf_id);
                 } else {
-                    $database->query("INSERT INTO enforcement (`vref`, `from`, `" . $col_name . "`) VALUES (" . $vref . ", 0, " . $qty . ")");
+                    $database->query("INSERT INTO enforcement (`vref`, `from`, `" . $col_name . "`) VALUES (" . $vref . ", " . $nature_wref . ", " . $qty . ")");
                 }
 
                 $message = "با موفقیت تعداد " . number_format($qty) . " حیوان دفاعی خریداری شد و در دهکده (" . htmlspecialchars($village->vname) . ") مستقر گردید. کسر شده: " . $cost . " سکه.";
@@ -146,7 +150,7 @@ if ($tribe == 1) { // Romans
     ];
 } else if ($tribe == 2) { // Teutons
     $troops_data = [
-        11 => ['name' => 'گرزدار (Clubswinger)', 'u' => 11],
+        11 => ['name' => 'گررزدار (Clubswinger)', 'u' => 11],
         12 => ['name' => 'نیزه‌دار (Spearman)', 'u' => 12],
         13 => ['name' => 'تبرزن (Axeman)', 'u' => 13],
         14 => ['name' => 'جاسوس (Scout)', 'u' => 14],
@@ -162,7 +166,7 @@ if ($tribe == 1) { // Romans
         23 => ['name' => 'ردیاب (Pathfinder)', 'u' => 23],
         24 => ['name' => 'رعد توتاتس (Theutates Thunder)', 'u' => 24],
         25 => ['name' => 'شوالیه دروید (Druidrider)', 'u' => 25],
-        26 => ['name' => 'حاکم (Haeduan)', 'u' => 26],
+        26 => ['name' => 'هردوان (Haeduan)', 'u' => 26],
         27 => ['name' => 'دژکوب (Ram)', 'u' => 27],
         28 => ['name' => 'منجنیق (Trebuchet)', 'u' => 28],
     ];
@@ -329,7 +333,7 @@ $animals_data = [
     </div>
 
     <!-- 2. BUY ANIMALS SECTION -->
-    <div class="section-title">🐘 خرید حیوانات طبیعت (جهت دفاع دهکده)</div>
+    <div class="section-title">🐻 خرید حیوانات طبیعت (جهت دفاع دهکده)</div>
     <p style="font-size: 12px; color: #718096; margin-bottom: 12px;">
         حیوانات طبیعت به عنوان نیروی کمکی در دهکده مستقر شده و دفاع فوق‌العاده‌ای در برابر حملات دشمن ایجاد می‌کنند.
     </p>

@@ -1,15 +1,15 @@
 <?php
 include_once "application/Account.php";
 
-$authority = isset($_GET['Authority']) ? trim($_GET['Authority']) : '';
-$status = isset($_GET['Status']) ? trim($_GET['Status']) : '';
+$authority = isset($_GET['Authority']) ? trim($_GET['Authority']) : (isset($_GET['authority']) ? trim($_GET['authority']) : '');
+$status = isset($_GET['Status']) ? trim($_GET['Status']) : (isset($_GET['status']) ? trim($_GET['status']) : '');
 
 if (empty($authority)) {
     header("Location: plus.php?status=error&msg=" . urlencode("کد شناسه تراکنش معتبر نیست."));
     exit;
 }
 
-if ($status !== 'OK') {
+if (strtoupper($status) !== 'OK') {
     // Payment cancelled by user
     $database->query("UPDATE odemeler SET durum = 'CANCELLED' WHERE anahtar = '" . $database->RemoveXSS($authority) . "'");
     header("Location: plus.php?status=cancel");
@@ -134,7 +134,7 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
     exit;
 } else {
     $error_code = isset($resultData['errors']['code']) ? $resultData['errors']['code'] : (isset($resultData['data']['code']) ? $resultData['data']['code'] : 'Unknown');
-    $error_msg = isset($resultData['errors']['message']) ? $resultData['errors']['message'] : "تراکنش توسط زرین‌پال تایید نشد (کد: " . $error_code . ")";
+    $error_msg = isset($resultData['errors']['message']) ? $resultData['errors']['message'] : ("تراکنش توسط زرین‌پال تایید نشد (کد: " . $error_code . ")");
     
     $database->query("UPDATE odemeler SET durum = 'FAILED' WHERE anahtar = '" . $database->RemoveXSS($authority) . "'");
     header("Location: plus.php?status=error&msg=" . urlencode($error_msg));
