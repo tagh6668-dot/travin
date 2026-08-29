@@ -1,6 +1,6 @@
 <?php 
     if(isset($_POST['vahala'])){
-		include("../../application/config.php");
+		if(file_exists(__DIR__ . "/../../application/config.php")) { include_once(__DIR__ . "/../../application/config.php"); }
 		$stmt=$baglanDB->prepare("SELECT * FROM `wdata` where x=? and y=?  LIMIT 1");
 		$stmt->execute([$_POST['xcor'],$_POST['ycor']]);
 		$vaha=$stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,6 +1,5 @@
-<?php include("views/Plus/pmenu.php"); ?>
 <div class="card">
-<div class="card-header">تولد أكواد</div>
+<div class="card-header">تولید کدهای هدیه (Gift Codes)</div>
 <div class="card-body"><?php
     function generateRandStr($length)
     {
@@ -18,31 +17,32 @@
         return $randstr;
     }
 
+    $isError = 0;
+    $Error = '';
     if(isset($_GET['del'])){
-        $database->query("DELETE FROM codes WHERE id = ".$_GET['del']."");
-        echo 'تم delete كود بنجاح <br><br>';
-        //header('Location: index.php?p=codes');
+        $database->query("DELETE FROM codes WHERE id = ".intval($_GET['del']));
+        echo '<div class="alert alert-success">کد هدیه با موفقیت حذف شد.</div><br>';
     }
     if(isset($_POST) && !empty($_POST)){
-        $_POST = filter_var_array($_POST, FILTER_SANITIZE_STRING);
-        if(is_numeric($_POST['goldAmount']) && is_numeric($_POST['codeNum'])){
-            
-            if($_POST['goldAmount'] > 0){
-                echo '<div class="alert alert-success">List the أكواد:<br>';
-                for($i=1;$i<=$_POST['codeNum'];$i++){
+        if(isset($_POST['goldAmount']) && is_numeric($_POST['goldAmount']) && isset($_POST['codeNum']) && is_numeric($_POST['codeNum'])){
+            $goldAmount = intval($_POST['goldAmount']);
+            $codeNum = intval($_POST['codeNum']);
+            if($goldAmount > 0 && $codeNum > 0){
+                echo '<div class="alert alert-success">لیست کدهای تولید شده:<br>';
+                for($i=1;$i<=$codeNum;$i++){
                     $code = generateRandStr(10);
-                    $database->query("INSERT into codes (codeNum,goldAmount) VALUES('".$code."', ".$_POST['goldAmount'].")");
+                    $database->query("INSERT into codes (codeNum,goldAmount,isUsed,idUser) VALUES('".$code."', ".$goldAmount.", 0, 0)");
                     echo $code;
                     echo '<br>';
                 }
                 echo '</div>';
             }else{
                 $isError++;
-                $Error = 'مدخلات خاطئة';
+                $Error = 'مقادیر وارد شده نامعتبر است.';
             }
         }else{
             $isError++;
-            $Error = 'مدخلات خاطئة';
+            $Error = 'مقادیر وارد شده نامعتبر است.';
         }
     }
 ?>
@@ -52,54 +52,55 @@
 <?php } ?>
 <form action="" method="post">
 <div class="form-group">
-        <label>quantity gold</label>
-        <input name="goldAmount" class="form-control" type="number" autocomplete="off">
+        <label>تعداد سکه (طلا) هر کد:</label>
+        <input name="goldAmount" class="form-control" type="number" autocomplete="off" required>
     </div>
     <div class="form-group">
-        <label>number أكواد</label>
-        <input name="codeNum" class="form-control" type="number" value="1" autocomplete="off">
+        <label>تعداد کدهای مورد نیاز:</label>
+        <input name="codeNum" class="form-control" type="number" value="1" autocomplete="off" required>
     </div>
 
     <div class="form-group">
-        <button class="btn btn-primary">تولد</button>
+        <button type="submit" class="btn btn-primary">تولید کد هدیه</button>
     </div>
 </form>
 </div>
 </div>
 
-<table cellpadding="1" cellspacing="1" class="table mt-5 mb-5" class="inbox">
+<table cellpadding="1" cellspacing="1" class="table mt-5 mb-5 inbox">
     <thead>
     <tr>
-			<th colspan="10">List the أكواد</th>
+			<th colspan="6">لیست کدهای هدیه ثبت شده</th>
 		</tr>
 
         <tr>
             <th>#</th>
-            <th>كود</th>
-            <th>gold</th>
-            <th>حة</th>
-            <th>player</th>
-            <th>Operations</th>
+            <th>کد</th>
+            <th>سکه (طلا)</th>
+            <th>وضعیت</th>
+            <th>بازیکن مصرف کننده</th>
+            <th>عملیات</th>
         </tr>
     </thead>
     <tbody>
     <?php $codes = $database->query("SELECT * FROM codes ORDER BY id DESC"); 
-    if(count($codes) > 0){
+    if(is_array($codes) && count($codes) > 0){
         foreach($codes as $code){
+            $u_info = ($code['isUsed'] && $code['idUser'] > 0) ? $database->getUserInfo($code['idUser']) : null;
+            $u_name = ($u_info && isset($u_info['username'])) ? $u_info['username'] : '-';
          ?>
         <tr>
         <td><?php echo $code['id']; ?></td>
-        <td><?php echo $code['codeNum']; ?></td>
-        <td><?php echo $code['goldAmount']; ?></td>
-        <td><?php echo $code['isUsed'] ? 'مستعمل' : 'غر مستعمل'; ?></td>
-        <td><?php echo  $code['isUsed'] ? '<a href="spieler.php?uid='.$code['idUser'].'">'.$database->getUserInfo($code['idUser'])['username'].'</a>' : '-'; ?></td>
-        <td><a href="index.php?p=codes&del=<?php echo $code['id']; ?>"><button class="btn btn-danger">delete</button></a></td>
+        <td><?php echo htmlspecialchars($code['codeNum']); ?></td>
+        <td><?php echo number_format($code['goldAmount']); ?></td>
+        <td><?php echo $code['isUsed'] ? '<span style="color:red;">مصرف شده</span>' : '<span style="color:green;">فعال</span>'; ?></td>
+        <td><?php echo $code['isUsed'] ? '<a href="spieler.php?uid='.$code['idUser'].'">'.htmlspecialchars($u_name).'</a>' : '-'; ?></td>
+        <td><a href="index.php?p=codes&del=<?php echo $code['id']; ?>"><button type="button" class="btn btn-danger btn-sm">حذف</button></a></td>
         </tr>
     <?php 
         }
         }else{
-            echo '<tr><td colspan="6">لا وجد أكواد بعد.</td></tr>';
+            echo '<tr><td colspan="6">هیچ کد هدیه‌ای ثبت نشده است.</td></tr>';
         } ?>
     </tbody>
 </table>
-

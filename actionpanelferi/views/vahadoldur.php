@@ -1,6 +1,6 @@
 <?php 
     if(isset($_POST['vahadoldur'])){
-		include("../../application/config.php");
+		if(file_exists(__DIR__ . "/../../application/config.php")) { include_once(__DIR__ . "/../../application/config.php"); }
 
 
 	
