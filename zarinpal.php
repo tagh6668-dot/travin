@@ -35,9 +35,9 @@ if (isset($db_config[0]['zarinpal_merchant']) && !empty($db_config[0]['zarinpal_
 }
 
 // Build callback URL
-$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
-$domain = $_SERVER['HTTP_HOST'];
-$script_path = dirname($_SERVER['SCRIPT_NAME']);
+$protocol = ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? "https" : "http";
+$domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost";
+$script_path = isset($_SERVER['SCRIPT_NAME']) ? dirname($_SERVER['SCRIPT_NAME']) : "";
 $callback_url = rtrim($protocol . "://" . $domain . $script_path, '/') . "/zarinpal_verify.php";
 
 $description = "خرید " . $gold_amount . " سکه تراوین - " . $package['name'];

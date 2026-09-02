@@ -90,7 +90,7 @@ define("MULTIHUNTER", 8);
 define("ADMIN", 9);
 define("COOKIE_EXPIRE", 60*60*24*7);
 define("COOKIE_PATH", "/");
-define("HOMEPAGE", isset($sData['HOMEPAGE']) ? $sData['HOMEPAGE'] : 'http://' . $_SERVER['HTTP_HOST'] . '/');
+define("HOMEPAGE", isset($sData['HOMEPAGE']) ? $sData['HOMEPAGE'] : 'http://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') . '/');
 define("MAXLENGHT", "15");
 define("RADIUS", 2);
 

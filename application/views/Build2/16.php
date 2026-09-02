@@ -68,7 +68,7 @@ if($units_incoming >= 1){
                         
                         
                         $output .= "<tr><th class=\"coords\">";
-                        if($tribe) $output .= '<span class="coordinates coordinatesWrapper coordinatesAligned coordinates<?php echo DIRECTION; ?>"><span class="coordinateX">('.$info['vx'].'</span><span class="coordinatePipe">|</span><span class="coordinateY">'.$info['vy'].')</span></span><span class="clear"></span>';
+                        if($tribe) $output .= '<span class="coordinates coordinatesWrapper coordinatesAligned coordinates' . DIRECTION . '"><span class="coordinateX">('.$info['vx'].'</span><span class="coordinatePipe">|</span><span class="coordinateY">'.$info['vy'].')</span></span><span class="clear"></span>';
                         if(!$tribe) $tribe =4; // Monsters
                         $output .= '</th>';
                             for($i=1;$i<=10;$i++) {
@@ -95,6 +95,33 @@ if($units_incoming >= 1){
                         $output .= "</tr></tbody>
                     <tbody class=\"infos\"><tr><th>".PY9."</th><td colspan=\"$colspan\"><div class='sup'>".$database->getUpkeep($enforce,$tribe,$village->resarray)."<i class=\"r4\"></i> ".PY10."</div><div class='sback'><a href='build.php?t=2&id=39&w=".$enforce['id']."'>".PY11."</a></div></td></tr>";
 
+                        $output .= "</tbody></table>";
+
+                        echo $output;
+                    } else {
+                        $tribe = 4;
+                        $output = "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">حیوانات وحشی</td><td colspan=\"" . $colspan . "\">نیروهای دفاعی کمکی</td></tr></thead><tbody class=\"units\">";
+                        $output .= "<tr><th class=\"coords\">&nbsp;</th>";
+                        for($i = 1; $i <= 10; $i++) {
+                            $uni = ($tribe - 1) * 10 + $i;
+                            $output .= "<td><img src=\"img/x.gif\" class=\"unit u" . $uni . "\" title=\"" . $technology->getUnitName($uni) . "\" alt=\"" . $technology->getUnitName($uni) . "\" /></td>";
+                        }
+                        if($enforce["u11"] != 0) {
+                            $output .= "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+                        }
+                        $output .= "</tr><tr><th>" . PY8 . "</th>";
+                        for($i = 1; $i <= 10; $i++) {
+                            if($enforce["u" . $i] == 0) {
+                                $output .= "<td class=\"none\">";
+                            } else {
+                                $output .= "<td>";
+                            }
+                            $output .= $enforce["u" . $i] . "</td>";
+                        }
+                        if($enforce["u11"] != 0) {
+                            $output .= "<td>" . $enforce["u11"] . "</td>";
+                        }
+                        $output .= "</tr></tbody><tbody class=\"infos\"><tr><th>" . PY9 . "</th><td colspan=\"" . $colspan . "\"><div class='sup'>" . $database->getUpkeep($enforce, $tribe, $village->resarray) . "<i class=\"r4\"></i> " . PY10 . "</div><div class='sback'><a href='build.php?t=2&id=39&w=" . $enforce["id"] . "'>" . PY11 . "</a></div></td></tr>";
                         $output .= "</tbody></table>";
 
                         echo $output;

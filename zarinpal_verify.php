@@ -128,9 +128,11 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
             VALUES ('" . $database->RemoveXSS($user_email) . "', 'Z', " . $gold_amount . ", " . time() . ", '" . $user_ip . "', 1)");
 
         // Send in-game confirmation message to user
+        $admin_res = $database->query("SELECT id FROM users WHERE access = 9 ORDER BY id ASC LIMIT 1");
+        $admin_uid = ($admin_res && count($admin_res) > 0) ? intval($admin_res[0]['id']) : 1;
         $msg_title = "شارژ حساب (خرید سکه)";
         $msg_body = "با تشکر، حساب شما با موفقیت به میزان " . number_format($gold_amount) . " سکه شارژ گردید.\nکد پیگیری تراکنش زرین‌پال: " . $ref_id;
-        $database->sendMessage($uid, 6, $msg_title, $msg_body, 0, 0, 0, 0);
+        $database->sendMessage($uid, $admin_uid, $msg_title, $msg_body, 0, 0, 0, 0);
     }
     
     unset($_SESSION['zarinpal_pay']);

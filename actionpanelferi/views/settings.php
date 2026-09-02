@@ -23,7 +23,7 @@ if (isset($_POST['update_settings'])) {
     @$database->query("ALTER TABLE config ADD COLUMN IF NOT EXISTS FINISH_ALL_COST int(11) NOT NULL DEFAULT '30'");
     @$database->query("ALTER TABLE config ADD COLUMN IF NOT EXISTS zarinpal_merchant varchar(100) NOT NULL DEFAULT 'b027468f-bd1d-4d48-9f6d-9038aa9ad46c'");
 
-    $check_cfg = $database->query("SELECT id FROM config LIMIT 1");
+    $check_cfg = $database->query("SELECT * FROM config LIMIT 1");
     if (!$check_cfg || count($check_cfg) == 0) {
         $database->query("INSERT INTO config (`FINISH_ALL_COST`, `zarinpal_merchant`, `DEFAULT_GOLD`, `SERVER_NAME`) 
             VALUES (" . $finish_all_cost . ", '" . $database->RemoveXSS($zarinpal_merchant) . "', " . $default_gold . ", '" . $server_name . "')");
