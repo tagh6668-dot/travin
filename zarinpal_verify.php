@@ -66,8 +66,11 @@ if ($amount_rial <= 0) {
     $amount_rial = intval($gold_amount * 1000 * 10);
 }
 
-// Get Merchant ID
+// Get Merchant ID from DB config or fallback to constant
 $merchant_id = "b027468f-bd1d-4d48-9f6d-9038aa9ad46c";
+if (defined('ZARINPAL_MERCHANT') && !empty(ZARINPAL_MERCHANT)) {
+    $merchant_id = trim(ZARINPAL_MERCHANT);
+}
 $db_config = $database->query("SELECT * FROM config LIMIT 1");
 if (isset($db_config[0]['zarinpal_merchant']) && !empty($db_config[0]['zarinpal_merchant'])) {
     $merchant_id = trim($db_config[0]['zarinpal_merchant']);
@@ -120,8 +123,9 @@ if (isset($resultData['data']['code']) && ($resultData['data']['code'] == 100 ||
         
         // Record in payments table if exists
         $user_email = isset($rec['email']) ? $rec['email'] : (isset($session->email) ? $session->email : '');
+        $user_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
         $database->query("INSERT INTO buygold (`email`, `tarif`, `gold`, `time`, `ip`, `status`) 
-            VALUES ('" . $database->RemoveXSS($user_email) . "', 'Z', " . $gold_amount . ", " . time() . ", '" . $_SERVER['REMOTE_ADDR'] . "', 1)");
+            VALUES ('" . $database->RemoveXSS($user_email) . "', 'Z', " . $gold_amount . ", " . time() . ", '" . $user_ip . "', 1)");
 
         // Send in-game confirmation message to user
         $msg_title = "شارژ حساب (خرید سکه)";

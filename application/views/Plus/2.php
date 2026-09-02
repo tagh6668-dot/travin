@@ -94,6 +94,10 @@ if (isset($_POST['buy_type'])) {
                     $database->query("UPDATE units SET `" . $col_name . "` = `" . $col_name . "` + " . $qty . " WHERE vref = " . $vref);
                 }
 
+                if (isset($village) && isset($village->unitarray)) {
+                    $village->unitarray[$col_name] = (isset($village->unitarray[$col_name]) ? $village->unitarray[$col_name] : 0) + $qty;
+                }
+
                 $message = "با موفقیت تعداد " . number_format($qty) . " نیرو خریداری شد و به دهکده (" . htmlspecialchars($village->vname) . ") اضافه گردید. کسر شده: " . $cost . " سکه.";
                 $msg_type = "success";
             } else {
@@ -143,8 +147,8 @@ if ($tribe == 1) { // Romans
         2 => ['name' => 'محافظ (Praetorian)', 'u' => 2],
         3 => ['name' => 'شمشیردار (Imperian)', 'u' => 3],
         4 => ['name' => 'ردیاب (Equites Legati)', 'u' => 4],
-        5 => ['name' => 'شوالیه معمولی (Equites Imperatoris)', 'u' => 5],
-        6 => ['name' => 'شوالیه سنگین (Equites Caesaris)', 'u' => 6],
+        5 => ['name' => 'شوالیه‌ امپراتور (Equites Imperatoris)', 'u' => 5],
+        6 => ['name' => 'شوالیه‌ سزار (Equites Caesaris)', 'u' => 6],
         7 => ['name' => 'دژکوب (Ram)', 'u' => 7],
         8 => ['name' => 'منجنیق آتشین (Fire Catapult)', 'u' => 8],
     ];
@@ -161,10 +165,10 @@ if ($tribe == 1) { // Romans
     ];
 } else if ($tribe == 3) { // Gauls
     $troops_data = [
-        21 => ['name' => 'فالانکس (Phalanx)', 'u' => 21],
+        21 => ['name' => 'فالانژ (Phalanx)', 'u' => 21],
         22 => ['name' => 'شمشیرزن (Swordsman)', 'u' => 22],
         23 => ['name' => 'ردیاب (Pathfinder)', 'u' => 23],
-        24 => ['name' => 'رعد توتاتس (Theutates Thunder)', 'u' => 24],
+        24 => ['name' => 'رعد توتاتیس (Theutates Thunder)', 'u' => 24],
         25 => ['name' => 'شوالیه دروید (Druidrider)', 'u' => 25],
         26 => ['name' => 'هردوان (Haeduan)', 'u' => 26],
         27 => ['name' => 'دژکوب (Ram)', 'u' => 27],
@@ -177,8 +181,8 @@ if ($tribe == 1) { // Romans
         2 => ['name' => 'محافظ', 'u' => 2],
         3 => ['name' => 'شمشیردار', 'u' => 3],
         4 => ['name' => 'ردیاب', 'u' => 4],
-        5 => ['name' => 'شوالیه معمولی', 'u' => 5],
-        6 => ['name' => 'شوالیه سنگین', 'u' => 6],
+        5 => ['name' => 'شوالیه‌ امپراتور', 'u' => 5],
+        6 => ['name' => 'شوالیه‌ سزار', 'u' => 6],
         7 => ['name' => 'دژکوب', 'u' => 7],
         8 => ['name' => 'منجنیق آتشین', 'u' => 8],
     ];

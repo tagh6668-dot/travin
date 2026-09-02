@@ -24,8 +24,11 @@ $gold_amount = intval($package['amount']);
 $price_toman = floatval($package['price']);
 $amount_rial = intval($price_toman * 10); // ZarinPal requires Rials
 
-// Get Merchant ID from DB config or fallback to user provided Merchant ID
+// Get Merchant ID from DB config or fallback to constant
 $merchant_id = "b027468f-bd1d-4d48-9f6d-9038aa9ad46c";
+if (defined('ZARINPAL_MERCHANT') && !empty(ZARINPAL_MERCHANT)) {
+    $merchant_id = trim(ZARINPAL_MERCHANT);
+}
 $db_config = $database->query("SELECT * FROM config LIMIT 1");
 if (isset($db_config[0]['zarinpal_merchant']) && !empty($db_config[0]['zarinpal_merchant'])) {
     $merchant_id = trim($db_config[0]['zarinpal_merchant']);
@@ -88,8 +91,9 @@ if (isset($resultData['data']['code']) && $resultData['data']['code'] == 100) {
     );
     
     // Record pending transaction in database (buygold / odemeler)
+    $user_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
     $database->query("INSERT INTO odemeler (`email`, `durum`, `aciklama`, `tip`, `amount`, `anahtar`, `time`, `ip`) 
-        VALUES ('" . $database->RemoveXSS($session->email) . "', 'PENDING', '" . $database->RemoveXSS($description) . "', 'zarinpal', " . $gold_amount . ", '" . $authority . "', " . time() . ", '" . $_SERVER['REMOTE_ADDR'] . "')");
+        VALUES ('" . $database->RemoveXSS($session->email) . "', 'PENDING', '" . $database->RemoveXSS($description) . "', 'zarinpal', " . $gold_amount . ", '" . $authority . "', " . time() . ", '" . $user_ip . "')");
 
     header('Location: https://www.zarinpal.com/pg/StartPay/' . $authority);
     exit;

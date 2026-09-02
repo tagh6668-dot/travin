@@ -71,29 +71,32 @@ if($session->access != 9){
 	?>
 		<div id="content" class="p-4 p-md-5 pt-5">
 			<?php
-									if($_POST or $_GET){
-										if($_GET['p'] and $_GET['p']!="search"){
-											$filename = 'views/'.$_GET['p'].'.php';
-											if(file_exists($filename)){
-												include($filename);
-											}else{
-												include('views/404.php');
-											}
-										}else{
-											include('views/search.php');
-										}
-										if($_POST['p'] and $_POST['s']){
-											$filename = 'views/results_'.$_POST['p'].'.php';
-											if(file_exists($filename)){
-												include($filename);
-											}else{
-												include('views/404.php');
-											}
-										}
-									}else{
-										include('views/home.php');
-									}
-									?>
+			if($_POST or $_GET){
+				if(!empty($_GET['p'])){
+					if($_GET['p'] != "search"){
+						$filename = 'views/'.$_GET['p'].'.php';
+						if(file_exists($filename)){
+							include($filename);
+						}else{
+							include('views/404.php');
+						}
+					}else{
+						include('views/search.php');
+					}
+				}else if(!empty($_POST['p']) && !empty($_POST['s'])){
+					$filename = 'views/results_'.$_POST['p'].'.php';
+					if(file_exists($filename)){
+						include($filename);
+					}else{
+						include('views/404.php');
+					}
+				}else{
+					include('views/home.php');
+				}
+			}else{
+				include('views/home.php');
+			}
+			?>
 				</div>
 			</div>
 			</div>

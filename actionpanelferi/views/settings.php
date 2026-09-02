@@ -1,6 +1,8 @@
 <?php
 if (!defined('APP_PATH') && !isset($session)) {
-    include_once "../../application/Account.php";
+    if (file_exists(__DIR__ . "/../../application/Account.php")) {
+        include_once __DIR__ . "/../../application/Account.php";
+    }
 }
 
 if ($session->access < 9) {
@@ -21,11 +23,17 @@ if (isset($_POST['update_settings'])) {
     @$database->query("ALTER TABLE config ADD COLUMN IF NOT EXISTS FINISH_ALL_COST int(11) NOT NULL DEFAULT '30'");
     @$database->query("ALTER TABLE config ADD COLUMN IF NOT EXISTS zarinpal_merchant varchar(100) NOT NULL DEFAULT 'b027468f-bd1d-4d48-9f6d-9038aa9ad46c'");
 
-    $database->query("UPDATE config SET 
-        FINISH_ALL_COST = " . $finish_all_cost . ", 
-        zarinpal_merchant = '" . $database->RemoveXSS($zarinpal_merchant) . "', 
-        DEFAULT_GOLD = " . $default_gold . ", 
-        SERVER_NAME = '" . $server_name . "'");
+    $check_cfg = $database->query("SELECT id FROM config LIMIT 1");
+    if (!$check_cfg || count($check_cfg) == 0) {
+        $database->query("INSERT INTO config (`FINISH_ALL_COST`, `zarinpal_merchant`, `DEFAULT_GOLD`, `SERVER_NAME`) 
+            VALUES (" . $finish_all_cost . ", '" . $database->RemoveXSS($zarinpal_merchant) . "', " . $default_gold . ", '" . $server_name . "')");
+    } else {
+        $database->query("UPDATE config SET 
+            FINISH_ALL_COST = " . $finish_all_cost . ", 
+            zarinpal_merchant = '" . $database->RemoveXSS($zarinpal_merchant) . "', 
+            DEFAULT_GOLD = " . $default_gold . ", 
+            SERVER_NAME = '" . $server_name . "'");
+    }
 
     $msg = "تنظیمات با موفقیت بروزرسانی شد!";
     $msg_type = "success";
